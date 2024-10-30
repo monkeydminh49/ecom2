@@ -11,6 +11,9 @@ public abstract class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-generate IDs
     private int id;
 
+    @Column(name = "payment_type", insertable = false, updatable = false)
+    private String paymentType;
+
     private String method;
     private double amount;
 

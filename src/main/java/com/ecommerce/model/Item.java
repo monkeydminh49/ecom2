@@ -6,6 +6,7 @@ import java.util.List;
 @Entity
 @Table(name = "items")
 @Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "item_type", discriminatorType = DiscriminatorType.STRING)
 public abstract class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +24,9 @@ public abstract class Item {
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rating> ratings;
+
+    @Column(name = "item_type", insertable = false, updatable = false)
+    private String itemType;
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }

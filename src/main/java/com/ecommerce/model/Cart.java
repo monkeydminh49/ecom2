@@ -1,11 +1,15 @@
 package com.ecommerce.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.UuidGenerator;
 
 @Entity
 @Table(name = "carts")
 public class Cart {
     @Id
+    @GeneratedValue
+    @UuidGenerator(style = UuidGenerator.Style.TIME)
+    @Column(name = "id_cart", columnDefinition = "VARCHAR(50)")
     private String idCart;
 
     @ManyToOne

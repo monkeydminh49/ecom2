@@ -6,17 +6,17 @@
 <body>
 <h1>Your Cart</h1>
 <div>Customer id <p th:text="${customerId}"></p></div>
-<!--<div th:each="cartItem : ${carts}">-->
-<!--    <p th:text="${cartItem.item.name}"></p>-->
-<!--    <p>Price: $<span th:text="${cartItem.item.price}"></span></p>-->
-<!--    <form th:action="@{/cart/{customerId}/remove(customerId=${cartItem.customer.id})}" method="post">-->
-<!--        <input type="hidden" th:value="${cartItem.item.id}" name="itemId"/>-->
-<!--        <button type="submit">Remove</button>-->
-<!--    </form>-->
-<!--</div>-->
+<div th:each="cartItem : ${carts}">
+    <p th:text="${cartItem.item.name}"></p>
+    <p>Price: $<span th:text="${cartItem.item.price}"></span></p>
+    <form th:action="@{/cart/{customerId}/remove(customerId=${customerId})}" method="post">
+        <input type="hidden" th:value="${cartItem.item.id}" name="itemId"/>
+        <button type="submit">Remove</button>
+    </form>
+</div>
 
-<!--<p>Total Price: $<span th:text="${totalPrice}"></span></p>-->
+<p>Total Price: $<span th:text="${totalPrice}"></span></p>
 
-<!--<a th:href="@{/checkout}">Proceed to Checkout</a>-->
+<a th:href="@{/checkout}">Proceed to Checkout</a>
 </body>
 </html>
