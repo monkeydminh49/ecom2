@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql_test
+    environment:
+      MYSQL_ROOT_PASSWORD: minhdunk # Mật khẩu cho tài khoản root
+      MYSQL_DATABASE: ecom # Tên cơ sở dữ liệu mặc định
+      MYSQL_USER: minhdunk # Tên người dùng
+      MYSQL_PASSWORD: minhdunk # Mật khẩu người dùng
+    ports:
+      - "13306:3306" # Map cổng 3306 từ container sang host
+    volumes:
+      - ./mysql_data:/var/lib/mysql # Lưu trữ dữ liệu MySQL trên volume để giữ dữ liệu khi container bị xóa
+
+#     networks:
+#       - my_network
+
+# volumes:
+#   mysql_data:
+#     # Khai báo volume để lưu trữ dữ liệu MySQL
+
+# networks:
+#   my_network: # Khai báo network cho các dịch vụ kết nối với nhau
