@@ -14,7 +14,7 @@ public class Customer {
     private Address address;
     @OneToOne
     private Account account;
-    @OneToMany
+    @OneToMany(mappedBy = "customer")
     private List<Cart> carts;
 
     public int getId() { return id; }
