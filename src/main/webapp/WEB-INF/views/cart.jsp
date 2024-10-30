@@ -15,20 +15,20 @@
     </tr>
     </thead>
     <tbody>
-    <c:forEach items="${cart.items}" var="item">
-        <tr>
-            <td>${item.name}</td>
-            <td>${item.price}</td>
-            <td>
-                <form action="${pageContext.request.contextPath}/cart/${cart.customer.id}/remove" method="post">
-                    <input type="hidden" name="itemId" value="${item.id}">
-                    <button type="submit">Remove</button>
-                </form>
-            </td>
-        </tr>
-    </c:forEach>
+<%--    <c:forEach items="${cart.items}" var="item">--%>
+<%--        <tr>--%>
+<%--            <td>${item.name}</td>--%>
+<%--            <td>${item.price}</td>--%>
+<%--            <td>--%>
+<%--                <form action="${pageContext.request.contextPath}/cart/${cart.customer.id}/remove" method="post">--%>
+<%--                    <input type="hidden" name="itemId" value="${item.id}">--%>
+<%--                    <button type="submit">Remove</button>--%>
+<%--                </form>--%>
+<%--            </td>--%>
+<%--        </tr>--%>
+<%--    </c:forEach>--%>
     </tbody>
 </table>
-<p>Total: ${cart.totalPrice}</p>
+<%--<p>Total: ${cart.totalPrice}</p>--%>
 </body>
 </html>
