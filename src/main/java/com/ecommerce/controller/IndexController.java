@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class IndexController {
 
     // Display the home page at a different endpoint
-    @GetMapping("/ư")
+    @GetMapping("/")
     public String home(Model model) {
         // Adding a welcome message attribute for the template
         model.addAttribute("welcomeMessage", "Welcome to the Home Page!");

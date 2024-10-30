@@ -23,15 +23,15 @@ public class CartController {
     @GetMapping("/{customerId}")
     public String viewCart(@PathVariable String customerId, Model model) {
         System.out.println("customerId = " + customerId);
-//        List<Cart> carts = cartService.getCartByCustomerId(customerId);
-//
-//        // Calculate total price
-//        double totalPrice = carts.stream()
-//                .mapToDouble(cart -> cart.getItem().getPrice())
-//                .sum();
-//
-//        model.addAttribute("carts", carts);
-//        model.addAttribute("totalPrice", totalPrice);
+        List<Cart> carts = cartService.getCartByCustomerId(customerId);
+
+        // Calculate total price
+        double totalPrice = carts.stream()
+                .mapToDouble(cart -> cart.getItem().getPrice())
+                .sum();
+
+        model.addAttribute("carts", carts);
+        model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("customerId", customerId);
         return "cart";
     }

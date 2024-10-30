@@ -1,6 +1,7 @@
 package com.ecommerce.dao;
 
 import com.ecommerce.model.Cart;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
