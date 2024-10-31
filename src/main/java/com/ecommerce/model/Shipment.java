@@ -7,10 +7,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "shipments")
-@Inheritance(strategy = InheritanceType.JOINED) // Use JOINED strategy for separate tables per subclass
+@Inheritance(strategy = InheritanceType.JOINED)
+@Getter
+@Setter
 public abstract class Shipment {
 
     @Id
@@ -20,16 +24,15 @@ public abstract class Shipment {
     private String trackingNumber;
     private String carrier;
     private String status;
+    private String address;
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-
-    public String getTrackingNumber() { return trackingNumber; }
-    public void setTrackingNumber(String trackingNumber) { this.trackingNumber = trackingNumber; }
-
-    public String getCarrier() { return carrier; }
-    public void setCarrier(String carrier) { this.carrier = carrier; }
-
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public static Shipment valueOf(String method) {
+        if (method.equalsIgnoreCase("drone")) {
+            return new ShipByDrone();
+        } else if (method.equalsIgnoreCase("road")) {
+            return new ShipByRoad();
+        } else {
+            return new ShipBySea();
+        }
+    }
 }

@@ -1,17 +1,17 @@
 package com.ecommerce.service;
 
-import com.ecommerce.dao.PaymentDAO;
 import com.ecommerce.model.Payment;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ecommerce.repository.PaymentDAO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
-    @Autowired
-    private PaymentDAO paymentDAO;
+    private final PaymentDAO paymentDAO;
 
     public Payment processPayment(Payment payment) {
-        paymentDAO.createPayment(payment);
+        paymentDAO.save(payment);
         return payment;
     }
 }

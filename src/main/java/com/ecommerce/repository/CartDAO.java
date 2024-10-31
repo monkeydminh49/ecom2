@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CartRepository extends JpaRepository<Cart, String> {
-    List<Cart> findByCustomerId(String customerId);
+public interface CartDAO extends JpaRepository<Cart, String> {
+    List<Cart> findByCustomerIdAndOrderIsNull(int customerId);
+
+    List<Cart> findByCustomerId(int customerId);
 }

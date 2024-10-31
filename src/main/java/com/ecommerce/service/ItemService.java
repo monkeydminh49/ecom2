@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface ItemService {
     List<Item> searchItems(String keyword);
-    Item getItemById(String itemId);
+    Item getItemById(int itemId);
 }

@@ -1,9 +1,13 @@
 package com.ecommerce.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "ratings")
+@Getter
+@Setter
 public class Rating {
 
     @Id
@@ -19,17 +23,4 @@ public class Rating {
     @ManyToOne
     @JoinColumn(name = "item_id") // This establishes the relationship with Item
     private Item item;
-
-    // Getters and setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-
-    public int getRatingValue() { return ratingValue; }
-    public void setRatingValue(int ratingValue) { this.ratingValue = ratingValue; }
-
-    public Customer getAuthor() { return author; }
-    public void setAuthor(Customer author) { this.author = author; }
-
-    public Item getItem() { return item; }
-    public void setItem(Item item) { this.item = item; }
 }

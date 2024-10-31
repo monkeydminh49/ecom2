@@ -1,9 +1,13 @@
 package com.ecommerce.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @DiscriminatorValue("BOOK") // Unique value for discriminator column
+@Getter
+@Setter
 public class Book extends Item {
 
     private String idBook;
@@ -16,25 +20,4 @@ public class Book extends Item {
 
     private String publisher;
     private String attribute;
-
-    public String getIdBook() { return idBook; }
-    public void setIdBook(String idBook) { this.idBook = idBook; }
-
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-
-    public String getISBN() { return ISBN; }
-    public void setISBN(String ISBN) { this.ISBN = ISBN; }
-
-    public String getAuthor() { return author; }
-    public void setAuthor(String author) { this.author = author; }
-
-    public Category getCategory() { return category; }
-    public void setCategory(Category category) { this.category = category; }
-
-    public String getPublisher() { return publisher; }
-    public void setPublisher(String publisher) { this.publisher = publisher; }
-
-    public String getAttribute() { return attribute; }
-    public void setAttribute(String attribute) { this.attribute = attribute; }
 }

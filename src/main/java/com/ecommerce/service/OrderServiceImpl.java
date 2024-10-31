@@ -1,20 +1,26 @@
 package com.ecommerce.service;
 
-import com.ecommerce.dao.OrderDAO;
 import com.ecommerce.model.Order;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ecommerce.repository.OrderDAO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@Service
-public class OrderServiceImpl implements OrderService {
-    @Autowired
-    private OrderDAO orderDAO;
+import java.util.List;
 
-    public Order getOrderById(String orderId) {
-        return orderDAO.getOrderById(orderId);
+@Service
+@RequiredArgsConstructor
+public class OrderServiceImpl implements OrderService {
+    private final OrderDAO orderDAO;
+
+    public Order getOrderById(int orderId) {
+        return orderDAO.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
     }
 
     public void createOrder(Order order) {
-        orderDAO.createOrder(order);
+        orderDAO.save(order);
+    }
+
+    public List<Order> getOrderByCustomerId(String customerId) {
+        return orderDAO.findByCustomerId(Integer.parseInt(customerId));
     }
 }

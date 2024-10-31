@@ -1,30 +1,46 @@
 package com.ecommerce.controller;
 
+import com.ecommerce.model.Cart;
 import com.ecommerce.model.Item;
+import com.ecommerce.service.CartService;
 import com.ecommerce.service.ItemService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
 @Controller
-@RequestMapping("/item")
+@RequestMapping({"/item/{customerId}", "/{customerId}"})
+@RequiredArgsConstructor
+@Slf4j
 public class ItemController {
 
-    @Autowired
-    private ItemService itemService;
+    private final ItemService itemService;
+    private final CartService cartService;
 
-    @GetMapping("/search")
-    public String searchItems(@RequestParam String keyword, Model model) {
+    @GetMapping({"/search", "/"})
+    public String searchItems(@RequestParam(required = false) String keyword,
+                              Model model,
+                              @PathVariable String customerId) {
+        if (keyword == null) keyword = "";
         List<Item> items = itemService.searchItems(keyword);
+        List<Cart> carts =  cartService.getCartByCustomerId(customerId);
+        log.info("Found {} items", items.size());
         model.addAttribute("items", items);
+        model.addAttribute("cartCount", carts.size());
         return "search";
     }
 
     @GetMapping("/{itemId}")
-    public String viewItemDetails(@PathVariable String itemId, Model model) {
+    public String viewItemDetails(@PathVariable int itemId,
+                                  Model model,
+                                  @PathVariable String customerId) {
         Item item = itemService.getItemById(itemId);
         model.addAttribute("item", item);
         return "itemDetails";

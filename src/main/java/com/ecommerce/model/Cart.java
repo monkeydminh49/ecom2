@@ -1,10 +1,14 @@
 package com.ecommerce.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
 @Table(name = "carts")
+@Getter
+@Setter
 public class Cart {
     @Id
     @GeneratedValue
@@ -16,25 +20,14 @@ public class Cart {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    @OneToOne(mappedBy = "cart", cascade = CascadeType.ALL)
+    private Order order;
+
     @ManyToOne
     @JoinColumn(name = "item_id")
     private Item item;
 
-    @OneToOne(cascade = CascadeType.ALL) // Assuming one payment per cart, and cascading changes
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "payment_id")     // This column will hold the foreign key to the payment table
     private Payment payment;
-
-    public String getIdCart() { return idCart; }
-    public void setIdCart(String idCart) { this.idCart = idCart; }
-
-    public Customer getCustomer() { return customer; }
-    public void setCustomer(Customer customer) { this.customer = customer; }
-
-    public Item getItem() { return item; }
-    public void setItem(Item item) { this.item = item; }
-
-    public Payment getPayment() { return payment; }
-    public void setPayment(Payment payment) { this.payment = payment; }
-
-    public double getTotalPrice() { return item.getPrice(); }
 }
