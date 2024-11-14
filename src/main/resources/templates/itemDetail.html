@@ -1,15 +1,339 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Item Detail</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${item.name} + ' | EcoShop'">Item Detail | EcoShop</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Base Styles - Keep consistent with main page */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --background-color: #f8f9fa;
+            --card-background: #ffffff;
+            --text-color: #2c3e50;
+            --border-radius: 8px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Header styles - Same as main page */
+        .header {
+            background: var(--primary-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Detail Page Specific Styles */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .detail-card {
+            background: var(--card-background);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .detail-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: var(--border-radius);
+        }
+
+        .detail-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .detail-header {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 1rem;
+        }
+
+        .detail-title {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-category {
+            color: var(--secondary-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .detail-meta {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .detail-price {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .quantity-input {
+            width: 100px;
+            padding: 0.5rem;
+            border: 2px solid #eee;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .stock-info {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .total-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 1rem 0;
+        }
+
+        .add-to-cart {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .add-to-cart:hover {
+            background: #34495e;
+        }
+
+        .add-to-cart:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: var(--accent-color);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .detail-card {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-image {
+                height: 300px;
+            }
+        }
+
+        /* Additional button group styles for main page */
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .view-details {
+            background: var(--secondary-color);
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .view-details:hover {
+            background: #2980b9;
+        }
+    </style>
 </head>
 <body>
-<h1 th:text="${item.name}">Item Name</h1>
-<p>Description: <span th:text="${item.description}">Item Description</span></p>
-<p>Price: $<span th:text="${item.price}"></span></p>
-<form th:action="@{/cart/add}" method="post">
-    <input type="hidden" th:value="${item.id}" name="itemId"/>
-    <button type="submit">Add to Cart</button>
-</form>
+<header class="header">
+    <div class="header-content">
+        <a th:href="@{/item/{customerId}/(customerId=${customerId})}" class="logo">
+            <i class="fas fa-shopping-bag"></i>
+            ECom2 Shop
+        </a>
+        <div>
+            <a th:href="@{/cart/{customerId}(customerId=${customerId})}" style="color: white; text-decoration: none;">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" th:text="${cartCount}">0</span>
+            </a>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <div class="detail-card">
+        <img class="detail-image" th:src="${item.productImage}" alt="Item Image">
+        <div class="detail-content">
+            <div class="detail-header">
+                <div class="detail-category" th:text="${item?.category?.name ?: 'Book'}">Category</div>
+                <h1 class="detail-title" th:text="${item.name}">Item Name</h1>
+                <div class="detail-meta">
+                    <div class="rating">
+                        <i class="fas fa-star star"></i>
+                        <span th:text="${item.averageRating > 0 ? #numbers.formatDecimal(item.averageRating, 1, 1) : 'No ratings'}">4.5</span>
+                        <span th:text="'(' + ${#lists.size(item.ratings)} + ')'"></span>
+                    </div>
+                    <div class="comments">
+                        <i class="fas fa-comment"></i>
+                        <span th:text="${#lists.size(item.comments)}">12</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-price">
+                <span th:text="${#numbers.formatDecimal(item.price, 0, 0)}">0.00</span> VND
+            </div>
+
+            <div class="stock-info">
+                <i class="fas fa-box"></i>
+                <span th:text="${item.stockQuantity + ' items left in stock'}">100 items left in stock</span>
+            </div>
+
+            <form th:action="@{/cart/{customerId}/add(customerId=${customerId})}" method="post" class="add-to-cart-form">
+                <input type="hidden" name="itemId" th:value="${item.id}">
+                <div class="quantity-selector">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number"
+                           id="quantity"
+                           name="quantity"
+                           class="quantity-input"
+                           value="1"
+                           min="1"
+                           th:max="${item.stockQuantity}"
+                           onchange="updateTotalPrice()">
+                </div>
+
+                <div class="total-price">
+                    Total: <span id="totalPrice" th:text="${#numbers.formatDecimal(item.price, 0, 0)}">0.00</span> VND
+                </div>
+
+                <button type="submit"
+                        class="add-to-cart"
+                        th:disabled="${item.stockQuantity == 0}">
+                    <i class="fas fa-cart-plus"></i>
+                    Add to Cart
+                </button>
+
+                <div class="error-message"
+                     th:if="${item.stockQuantity == 0}">
+                    This item is currently out of stock
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script>
+    function updateTotalPrice() {
+        const quantity = document.getElementById('quantity').value;
+        const basePrice = [[${item.price}]];
+        const totalPrice = quantity * basePrice;
+        document.getElementById('totalPrice').textContent = totalPrice.toLocaleString();
+    }
+
+    // Validate quantity doesn't exceed stock
+    document.querySelector('.quantity-input').addEventListener('change', function(e) {
+        const maxStock = [[${item.stockQuantity}]];
+        if (parseInt(this.value) > maxStock) {
+            this.value = maxStock;
+            alert('Quantity cannot exceed available stock');
+        }
+        updateTotalPrice();
+    });
+
+    // Handle form submission
+    document.querySelector('.add-to-cart-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch(e.target.action, {
+                method: 'POST',
+                body: new FormData(e.target),
+            });
+            if (response.ok) {
+                const cartCount = document.querySelector('.cart-count');
+                console.log("text content: ", cartCount.textContent);
+                cartCount.textContent = parseInt(cartCount.textContent) + parseInt(document.getElementById('quantity').value);
+                alert('Items added to cart successfully!');
+            }
+        } catch (error) {
+            console.error('Error adding item to cart:', error);
+            alert('Error adding items to cart');
+        }
+    });
+</script>
 </body>
 </html>

@@ -53,6 +53,15 @@ public class CartServiceImpl implements CartService {
             order.setCart(cart);
             cart.setOrder(order);
             cartsWithOrder.add(cart);
+
+            // Update stock quantity
+            Item item = cart.getItem();
+            int newQuantity = item.getStockQuantity() - 1;
+            if (newQuantity < 0) {
+                throw new RuntimeException("Insufficient stock for item: " + item.getName());
+            }
+            item.setStockQuantity(newQuantity);
+            itemDAO.save(item);
         });
         cartDAO.saveAll(cartsWithOrder);
     }
@@ -60,12 +69,25 @@ public class CartServiceImpl implements CartService {
     @Override
     public void addItemToCart(String customerId, String itemId) {
         int parsedItemId = Integer.parseInt(itemId); // Convert itemId to int
-        Cart cart = new Cart();
-        Customer customer = customerDAO.findById(Integer.valueOf(customerId)).get();
-        Item item = itemDAO.findById(parsedItemId).get();
-        cart.setCustomer(customer);
-        cart.setItem(item);
-        cartDAO.save(cart);
+        int parsedCustomerId = Integer.parseInt(customerId); // Convert customerId to int
+
+        // Check if the cart entry already exists
+        List<Cart> existingCarts = cartDAO.findByCustomerIdAndItemId(parsedCustomerId, parsedItemId);
+        if (!existingCarts.isEmpty()) {
+            // Update the quantity of the existing cart entry
+            Cart existingCart = existingCarts.get(0);
+            existingCart.setQuantity(existingCart.getQuantity() + 1);
+            cartDAO.save(existingCart);
+        } else {
+            // Create a new cart entry
+            Cart cart = new Cart();
+            Customer customer = customerDAO.findById(parsedCustomerId).get();
+            Item item = itemDAO.findById(parsedItemId).get();
+            cart.setCustomer(customer);
+            cart.setItem(item);
+            cart.setQuantity(1); // Set initial quantity to 1
+            cartDAO.save(cart);
+        }
     }
 
     @Override

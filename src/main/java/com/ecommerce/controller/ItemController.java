@@ -37,12 +37,14 @@ public class ItemController {
         return "search";
     }
 
-    @GetMapping("/{itemId}")
+    @GetMapping("/detail/{itemId}")
     public String viewItemDetails(@PathVariable int itemId,
                                   Model model,
                                   @PathVariable String customerId) {
         Item item = itemService.getItemById(itemId);
         model.addAttribute("item", item);
-        return "itemDetails";
+        List<Cart> carts =  cartService.getCartByCustomerId(customerId);
+        model.addAttribute("cartCount", carts.size());
+        return "itemDetail";
     }
 }

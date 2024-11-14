@@ -30,4 +30,7 @@ public class Cart {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "payment_id")     // This column will hold the foreign key to the payment table
     private Payment payment;
+
+    @Column(name = "quantity")
+    private int quantity = 1;
 }

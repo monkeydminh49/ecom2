@@ -36,6 +36,9 @@ public abstract class Item {
     @Column(name = "product_image")
     private String productImage;
 
+    @Column(name = "stock_quantity")
+    private int stockQuantity = 0;
+
     // In your Item class, add this method:
     @Transient  // This won't be persisted to the database
     public double getAverageRating() {

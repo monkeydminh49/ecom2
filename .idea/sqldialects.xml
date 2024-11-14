@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$USER_HOME$/Downloads/drive-download-20241031T062917Z-001/accounts.sql" dialect="MySQL" />
+    <file url="file://$USER_HOME$/Downloads/drive-download-20241031T062917Z-001/addresses.sql" dialect="MySQL" />
+    <file url="file://$USER_HOME$/Downloads/drive-download-20241031T062917Z-001/book.sql" dialect="MySQL" />
+    <file url="file://$USER_HOME$/Downloads/drive-download-20241031T062917Z-001/carts.sql" dialect="MySQL" />
+    <file url="file://$USER_HOME$/Downloads/drive-download-20241031T062917Z-001/categories.sql" dialect="MySQL" />
+    <file url="file://$USER_HOME$/Downloads/drive-download-20241031T062917Z-001/clothes.sql" dialect="MySQL" />
+    <file url="file://$USER_HOME$/Downloads/drive-download-20241031T062917Z-001/comments.sql" dialect="MySQL" />
+    <file url="file://$USER_HOME$/Downloads/drive-download-20241031T062917Z-001/customers.sql" dialect="MySQL" />
+    <file url="file://$USER_HOME$/Downloads/drive-download-20241031T062917Z-001/items.sql" dialect="MySQL" />
+    <file url="file://$USER_HOME$/Downloads/drive-download-20241031T062917Z-001/orders.sql" dialect="MySQL" />
+    <file url="file://$USER_HOME$/Downloads/drive-download-20241031T062917Z-001/payment.sql" dialect="MySQL" />
+    <file url="file://$USER_HOME$/Downloads/drive-download-20241031T062917Z-001/ratings.sql" dialect="MySQL" />
+    <file url="file://$USER_HOME$/Downloads/drive-download-20241031T062917Z-001/ship_by_drone.sql" dialect="MySQL" />
+    <file url="file://$USER_HOME$/Downloads/drive-download-20241031T062917Z-001/ship_by_road.sql" dialect="MySQL" />
+    <file url="file://$USER_HOME$/Downloads/drive-download-20241031T062917Z-001/ship_by_sea.sql" dialect="MySQL" />
+    <file url="file://$USER_HOME$/Downloads/drive-download-20241031T062917Z-001/shipments.sql" dialect="MySQL" />
+    <file url="file://$USER_HOME$/Downloads/drive-download-20241031T062917Z-001/shoes.sql" dialect="MySQL" />
+  </component>
+</project>
