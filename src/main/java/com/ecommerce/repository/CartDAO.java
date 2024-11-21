@@ -12,5 +12,5 @@ public interface CartDAO extends JpaRepository<Cart, String> {
 
     List<Cart> findByCustomerId(int customerId);
 
-    List<Cart> findByCustomerIdAndItemId(int customerId, int itemId);
+    List<Cart> findByCustomerIdAndItemIdAndOrderIsNull(int customerId, int itemId);
 }

@@ -9,4 +9,6 @@ public interface OrderService {
     void createOrder(Order order);
 
     List<Order> getOrderByCustomerId(String customerId);
+
+    List<Order> getOrderByStaffId(String staffId);
 }

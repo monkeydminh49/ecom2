@@ -21,4 +21,11 @@ public class OrderController {
         model.addAttribute("customerId", customerId);
         return "order";
     }
+
+    @GetMapping("/staff/{staffId}")
+    public String viewOrderStaff(@PathVariable String staffId, Model model) {
+        model.addAttribute("orders", orderService.getOrderByStaffId(staffId));
+        model.addAttribute("staffId", staffId);
+        return "staff";
+    }
 }

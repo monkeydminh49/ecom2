@@ -72,7 +72,7 @@ public class CartServiceImpl implements CartService {
         int parsedCustomerId = Integer.parseInt(customerId); // Convert customerId to int
 
         // Check if the cart entry already exists
-        List<Cart> existingCarts = cartDAO.findByCustomerIdAndItemId(parsedCustomerId, parsedItemId);
+        List<Cart> existingCarts = cartDAO.findByCustomerIdAndItemIdAndOrderIsNull(parsedCustomerId, parsedItemId);
         if (!existingCarts.isEmpty()) {
             // Update the quantity of the existing cart entry
             Cart existingCart = existingCarts.get(0);

@@ -25,6 +25,7 @@ public class CartController {
     @GetMapping("/{customerId}")
     public String viewCart(@PathVariable String customerId, Model model) {
         List<Cart> carts = cartService.getCartByCustomerId(customerId);
+        log.info("Cart amount item for customer: {}, is: {}", customerId, carts.size());
         model.addAttribute("carts", carts);
         Double totalPrice = cartService.calculateTotalPrice(customerId);
         model.addAttribute("totalPrice", totalPrice);
