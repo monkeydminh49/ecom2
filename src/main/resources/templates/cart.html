@@ -5,7 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Shopping Cart | EcoShop</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
     <style>
+
+        /* Add these styles to your existing CSS */
+.gift-card-section {
+    margin-bottom: 3rem;
+}
+
+.gift-card-container {
+    background: var(--card-background);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 2rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.gift-card-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: var(--primary-color);
+}
+
+.gift-card-header i {
+    font-size: 2rem;
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+.gift-card-header h2 {
+    font-size: 1.5rem;
+}
+
+.gift-card-form {
+    display: flex;
+    gap: 1rem;
+}
+
+.gift-card-input {
+    flex: 1;
+    padding: 0.8rem 1.2rem;
+    border: 2px solid #eee;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: var(--transition);
+    letter-spacing: 2px;
+}
+
+.gift-card-input:focus {
+    border-color: var(--secondary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.gift-card-btn {
+    min-width: 120px;
+}
+
+@media (max-width: 768px) {
+    .gift-card-container {
+        margin: 0 1rem;
+    }
+
+    .gift-card-form {
+        flex-direction: column;
+    }
+
+    .gift-card-btn {
+        width: 100%;
+    }
+}
         * {
             margin: 0;
             padding: 0;
@@ -430,6 +500,26 @@
         </div>
     </div>
 
+    <div class="gift-card-section">
+        <div class="gift-card-container">
+            <div class="gift-card-header">
+                <i class="fas fa-gift"></i>
+                <h2>Have a Gift Card?</h2>
+            </div>
+            <div class="gift-card-form">
+                <input type="text" 
+                       id="giftCardInput" 
+                       placeholder="Enter gift card code"
+                       maxlength="19"
+                       class="gift-card-input">
+                <button class="btn btn-primary gift-card-btn">
+                    <i class="fas fa-check"></i>
+                    Apply Card
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="checkout-section">
         <div class="checkout-options">
             <div class="option-group">
@@ -496,6 +586,34 @@
 </div>
 
 <script>
+
+    // Gift card input formatting and validation
+const giftCardInput = document.getElementById('giftCardInput');
+giftCardInput.addEventListener('input', function(e) {
+    // Remove any non-alphanumeric characters
+    let value = e.target.value.replace(/[^\w]/g, '');
+    
+    // Add a dash every 4 characters
+    value = value.replace(/(.{4})/g, '$1-');
+    
+    // Remove trailing dash
+    value = value.replace(/-$/, '');
+    
+    // Update input value
+    e.target.value = value.toUpperCase();
+});
+
+// Gift card submission
+document.querySelector('.gift-card-btn').addEventListener('click', function() {
+    const code = giftCardInput.value.replace(/-/g, '');
+    if (code.length < 16) {
+        alert('Please enter a valid gift card code');
+        return;
+    }
+    // Here you would typically make an API call to validate the gift card
+    alert('Gift card applied successfully!');
+    giftCardInput.value = '';
+});
     let selectedPayment = null;
     let selectedShipping = null;
 

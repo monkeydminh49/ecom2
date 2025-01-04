@@ -20,6 +20,114 @@
             --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
+        .step-label {
+            font-size: 0.875rem;
+            color: var(--text-color);
+            margin-top: 0.5rem;
+        }
+
+        /* Refund Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: var(--card-background);
+            margin: 15% auto;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .modal-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-body {
+            margin-bottom: 1.5rem;
+        }
+
+        .refund-amount {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin: 1rem 0;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .btn-refund {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .btn-refund:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-cancel {
+            background-color: #95a5a6;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .btn-cancel:hover {
+            background-color: #7f8c8d;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -329,6 +437,13 @@
         </div>
 
         <div class="order-content">
+            <div class="order-actions">
+                <button th:if="${order.status == 'Delivered'}"
+                        class="btn-refund"
+                        th:onclick="'openRefundModal(\'' + ${order.id} + '\', \'' + ${order.cart.item.price * order.cart.quantity} + '\')'">
+                    Request Refund
+                </button>
+            </div>
             <div class="order-details">
                 <div class="detail-group">
                     <span class="detail-label">Shipping Address</span>
@@ -381,8 +496,57 @@
         </div>
     </div>
 </main>
-
+<div id="refundModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Request Refund</h2>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to request a refund for this order?</p>
+            <div class="refund-amount">
+                Refund Amount: $<span id="refundAmount">0.00</span>
+            </div>
+            <p class="text-muted">Note: Refund requests are subject to review and approval.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel" onclick="closeRefundModal()">Cancel</button>
+            <button class="btn-refund" onclick="confirmRefund()">Confirm Refund</button>
+        </div>
+    </div>
+</div>
 <script>
+    let currentOrderId = null;
+
+    function openRefundModal(orderId, amount) {
+        currentOrderId = orderId;
+        document.getElementById('refundAmount').textContent = parseFloat(amount).toFixed(2);
+        document.getElementById('refundModal').style.display = 'block';
+    }
+
+    function closeRefundModal() {
+        document.getElementById('refundModal').style.display = 'none';
+        currentOrderId = null;
+    }
+
+    function confirmRefund() {
+        // Mock API call - in real implementation, this would call your backend
+        const token = localStorage.getItem('userToken'); // Get stored token
+
+        // Simulating API request
+        console.log(`Requesting refund for order ${currentOrderId}`);
+
+        // Show success message
+        alert('Refund request submitted successfully!');
+        closeRefundModal();
+    }
+
+    // Close modal if user clicks outside
+    window.onclick = function (event) {
+        const modal = document.getElementById('refundModal');
+        if (event.target == modal) {
+            closeRefundModal();
+        }
+    }
     // Animate cards on scroll
     const observerOptions = {
         threshold: 0.1,

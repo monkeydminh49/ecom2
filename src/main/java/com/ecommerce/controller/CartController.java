@@ -2,7 +2,7 @@ package com.ecommerce.controller;
 
 import com.ecommerce.dto.OrderData;
 import com.ecommerce.model.Cart;
-import com.ecommerce.service.CartService;
+import com.ecommerce.dao.CartDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,14 +20,14 @@ import java.util.Map;
 public class CartController {
 
     @Autowired
-    private CartService cartService;
+    private CartDAO cartDAO;
 
     @GetMapping("/{customerId}")
     public String viewCart(@PathVariable String customerId, Model model) {
-        List<Cart> carts = cartService.getCartByCustomerId(customerId);
+        List<Cart> carts = cartDAO.getCartByCustomerId(customerId);
         log.info("Cart amount item for customer: {}, is: {}", customerId, carts.size());
         model.addAttribute("carts", carts);
-        Double totalPrice = cartService.calculateTotalPrice(customerId);
+        Double totalPrice = cartDAO.calculateTotalPrice(customerId);
         model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("customerId", customerId);
         return "cart";
@@ -35,13 +35,13 @@ public class CartController {
 
     @PostMapping("/{customerId}/add")
     public String addItemToCart(@PathVariable String customerId, @RequestParam String itemId, Model model) {
-        cartService.addItemToCart(customerId, itemId);
+        cartDAO.addItemToCart(customerId, itemId);
         return "redirect:/cart/" + customerId;
     }
 
     @PostMapping("/{customerId}/remove")
     public String removeItemFromCart(@PathVariable String customerId, @RequestParam String itemId) {
-        cartService.removeItemFromCart(customerId, itemId);
+        cartDAO.removeItemFromCart(customerId, itemId);
         return "redirect:/cart/" + customerId;
     }
 
@@ -49,7 +49,7 @@ public class CartController {
     @ResponseBody
     public ResponseEntity<Map<String, String>> checkout(@PathVariable String customerId, @RequestBody OrderData orderData) {
         log.info("Order submitted successfully for customer: {}, paymentMethod: {}, shippingMethod: {}", customerId, orderData.getPaymentMethod(), orderData.getShippingMethod());
-        cartService.checkOutCart(customerId, orderData.getPaymentMethod(), orderData.getShippingMethod());
+        cartDAO.checkOutCart(customerId, orderData.getPaymentMethod(), orderData.getShippingMethod());
         Map<String, String> response = new HashMap<>();
         response.put("message", "Order submitted successfully");
         response.put("customerId", customerId);

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management | EcoShop</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Base Styles - Keeping consistent with order.html */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f1c40f;
+            --background-color: #f8f9fa;
+            --card-background: #ffffff;
+            --text-color: #2c3e50;
+            --border-radius: 8px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Header - Same as order.html */
+        .header {
+            background: var(--primary-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+        }
+
+        /* Inventory Specific Styles */
+        .inventory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: rgba(52, 152, 219, 0.1);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+        }
+
+        .search-bar {
+            flex: 1;
+            margin-right: 1rem;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .btn-add-item {
+            background-color: var(--success-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.2s;
+        }
+
+        .btn-add-item:hover {
+            background-color: #219a52;
+        }
+
+        /* Inventory Grid */
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .inventory-card {
+            background: var(--card-background);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: transform 0.2s;
+            animation: slideIn 0.5s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .inventory-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .item-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .item-content {
+            padding: 1.5rem;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .item-title {
+            font-size: 1.25rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .item-category {
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        .item-price {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .stock-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .stock-low {
+            background: #ffe0e0;
+            color: var(--accent-color);
+        }
+
+        .stock-good {
+            background: #e0ffe0;
+            color: var(--success-color);
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn-edit, .btn-delete {
+            flex: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: background-color 0.2s;
+        }
+
+        .btn-edit {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background-color: #d4ac0d;
+        }
+
+        .btn-delete {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #c0392b;
+        }
+
+        /* Modal Styles - Same as order.html */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: var(--card-background);
+            margin: 15% auto;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .modal-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .inventory-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .search-bar {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+
+            .btn-add-item {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="header-content">
+        <a href="/" class="logo">
+            <i class="fas fa-shopping-bag"></i>
+            ECom2
+        </a>
+        <nav>
+            <a href="/orders" style="color: white; text-decoration: none; margin-left: 1rem;">
+                <i class="fas fa-box"></i>
+            </a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <h1 class="page-title">Inventory Management</h1>
+
+    <div class="inventory-header">
+        <div class="search-bar">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Search items..." id="searchInput">
+        </div>
+        <button class="btn-add-item" onclick="openAddModal()">
+            <i class="fas fa-plus"></i>
+            Add New Item
+        </button>
+    </div>
+
+    <div class="inventory-grid">
+        <div th:each="item, itemStat : ${items}"
+             class="inventory-card"
+             th:style="'animation-delay: ' + ${itemStat.index * 0.1} + 's'">
+            <img class="item-image" th:src="${item.productImage}" alt="Product Image">
+            <div class="item-content">
+                <div class="item-header">
+                    <div>
+                        <h3 class="item-title" th:text="${item.name}">Product Name</h3>
+                        <span class="item-category" th:text="${item.itemType}">Category</span>
+                    </div>
+                    <div class="item-price">
+                        $<span th:text="${#numbers.formatDecimal(item.price, 0, 2)}">0.00</span>
+                    </div>
+                </div>
+                <div class="stock-badge" th:classappend="${item.stockQuantity < 10 ? 'stock-low' : 'stock-good'}">
+                    Stock: <span th:text="${item.stockQuantity}">0</span>
+                </div>
+                <div class="item-actions">
+                    <button class="btn-edit" th:onclick="'editItem(' + ${item.id} + ')'">
+                        <i class="fas fa-edit"></i>
+                        Edit
+                    </button>
+                    <button class="btn-delete" th:onclick="'deleteItem(' + ${item.id} + ')'">
+                        <i class="fas fa-trash"></i>
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Add/Edit Item Modal -->
+<div id="itemModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title" id="modalTitle">Add New Item</h2>
+        </div>
+        <form id="itemForm">
+            <div class="form-group">
+                <label for="itemName">Name</label>
+                <input type="text" id="itemName" required>
+            </div>
+            <div class="form-group">
+                <label for="itemCategory">Category</label>
+                <input type="text" id="itemCategory" required>
+            </div>
+            <div class="form-group">
+                <label for="itemPrice">Price</label>
+                <input type="number" id="itemPrice" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label for="itemQuantity">Stock Quantity</label>
+                <input type="number" id="itemQuantity" required>
+            </div>
+            <div class="form-group">
+                <label for="itemImage">Image URL</label>
+                <input type="url" id="itemImage" required>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+                <button type="submit" class="btn-add-item">Save Item</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Modal Functions
+    function openAddModal() {
+        document.getElementById('modalTitle').textContent = 'Add New Item';
+        document.getElementById('itemModal').style.display = 'block';
+        resetForm();
+    }
+
+    function closeModal() {
+        document.getElementById('itemModal').style.display = 'none';
+    }
+
+    function resetForm() {
+        document.getElementById('itemForm').reset();
+    }
+
+    function editItem(itemId) {
+        document.getElementById('modalTitle').textContent = 'Edit Item';
+        document.getElementById('itemModal').style.display = 'block';
+        // Fetch and populate item details
+    }
+
+    function deleteItem(itemId) {
+        if (confirm('Are you sure you want to delete this item?')) {
+            // Handle delete
+        }
+    }
+
+    // Form submission
+    document.getElementById('itemForm').onsubmit = function(e) {
+        e.preventDefault();
+        // Handle form submission
+        closeModal();
+    };
+
+    // Close modal on outside click
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('itemModal')) {
+            closeModal();
+        }
+    };
+
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        // Implement search logic
+    });
+
+    // Animation observer
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '50px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.inventory-card').forEach(card => {
+        observer.observe(card);
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECom2 Shop - Marketing Campaigns</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #2ecc71;
+            --background-color: #f8f9fa;
+            --card-background: white;
+            --text-color: #2c3e50;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: -3rem;
+        }
+
+        .stat-card {
+            background: var(--card-background);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .stat-card i {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .campaigns-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .campaign-card {
+            background: var(--card-background);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .campaign-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .campaign-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .campaign-type {
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+
+        .campaign-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .campaign-stat {
+            text-align: center;
+            padding: 0.5rem;
+            background: var(--background-color);
+            border-radius: var(--border-radius);
+        }
+
+        .status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+
+        .status-active {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .status-scheduled {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .status-ended {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .footer {
+            background: var(--primary-color);
+            color: white;
+            padding: 2rem 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                margin-top: -2rem;
+            }
+            .campaigns-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="header-content">
+        <div class="logo">
+            <i class="fas fa-shopping-bag"></i>
+            ECom2 Shop
+        </div>
+        <nav>
+            <i class="fas fa-user"></i>
+        </nav>
+    </div>
+</header>
+
+<section class="hero">
+    <h1>Marketing Campaigns</h1>
+    <p>Track and manage your marketing initiatives</p>
+</section>
+
+<div class="container">
+    <div class="stats-grid">
+        <div class="stat-card">
+            <i class="fas fa-bullhorn"></i>
+            <h3>Total Campaigns</h3>
+            <h2 th:text="${stats.totalCampaigns}">0</h2>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-users"></i>
+            <h3>Active Customers</h3>
+            <h2 th:text="${#numbers.formatDecimal(stats.activeCustomers, 0, 'COMMA', 0, 'POINT')}">0</h2>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-dollar-sign"></i>
+            <h3>Total Revenue</h3>
+            <h2 th:text="${'$' + #numbers.formatDecimal(stats.totalRevenue, 0, 'COMMA', 0, 'POINT')}">$0</h2>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-chart-line"></i>
+            <h3>Conversion Rate</h3>
+            <h2 th:text="${stats.conversionRate + '%'}">0%</h2>
+        </div>
+    </div>
+
+    <div class="campaigns-grid">
+        <div class="campaign-card" th:each="campaign : ${campaigns}">
+            <div class="campaign-header">
+                <span class="campaign-type" th:text="${campaign.type}">Email</span>
+                <span th:class="'status ' + 'status-' + ${#strings.toLowerCase(campaign.status)}"
+                      th:text="${campaign.status}">Active</span>
+            </div>
+            <h3 th:text="${campaign.name}">Campaign Name</h3>
+            <p th:text="${'ID: ' + campaign.id}">ID: CAM-1001</p>
+            <div class="campaign-stats">
+                <div class="campaign-stat">
+                    <div th:text="${#numbers.formatDecimal(campaign.reach, 0, 'COMMA', 0, 'POINT')}">0</div>
+                    <small>Reach</small>
+                </div>
+                <div class="campaign-stat">
+                    <div th:text="${campaign.conversion + '%'}">0%</div>
+                    <small>Conversion</small>
+                </div>
+                <div class="campaign-stat">
+                    <div th:text="${'$' + #numbers.formatDecimal(campaign.revenue, 0, 'COMMA', 0, 'POINT')}">$0</div>
+                    <small>Revenue</small>
+                </div>
+                <div class="campaign-stat">
+                    <div th:text="${campaign.startDate}">2024-01-01</div>
+                    <small>Start Date</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="footer-content">
+        <p>&copy; 2024 ECom2 Shop. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>

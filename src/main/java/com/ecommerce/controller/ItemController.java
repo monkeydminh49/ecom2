@@ -2,8 +2,8 @@ package com.ecommerce.controller;
 
 import com.ecommerce.model.Cart;
 import com.ecommerce.model.Item;
-import com.ecommerce.service.CartService;
-import com.ecommerce.service.ItemService;
+import com.ecommerce.dao.CartDAO;
+import com.ecommerce.dao.ItemDAO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -21,16 +21,16 @@ import java.util.List;
 @Slf4j
 public class ItemController {
 
-    private final ItemService itemService;
-    private final CartService cartService;
+    private final ItemDAO itemDAO;
+    private final CartDAO cartDAO;
 
     @GetMapping({"/search", "/"})
     public String searchItems(@RequestParam(required = false) String keyword,
                               Model model,
                               @PathVariable String customerId) {
         if (keyword == null) keyword = "";
-        List<Item> items = itemService.searchItems(keyword);
-        List<Cart> carts =  cartService.getCartByCustomerId(customerId);
+        List<Item> items = itemDAO.searchItems(keyword);
+        List<Cart> carts =  cartDAO.getCartByCustomerId(customerId);
         log.info("Found {} items", items.size());
         model.addAttribute("items", items);
         model.addAttribute("cartCount", carts.size());
@@ -41,9 +41,9 @@ public class ItemController {
     public String viewItemDetails(@PathVariable int itemId,
                                   Model model,
                                   @PathVariable String customerId) {
-        Item item = itemService.getItemById(itemId);
+        Item item = itemDAO.getItemById(itemId);
         model.addAttribute("item", item);
-        List<Cart> carts =  cartService.getCartByCustomerId(customerId);
+        List<Cart> carts =  cartDAO.getCartByCustomerId(customerId);
         model.addAttribute("cartCount", carts.size());
         return "itemDetail";
     }

@@ -1,9 +1,13 @@
 package com.ecommerce.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "comments")
+@Getter
+@Setter
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,16 +22,4 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer author;
-
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
-
-    public Item getItem() { return item; }
-    public void setItem(Item item) { this.item = item; }
-
-    public Customer getAuthor() { return author; }
-    public void setAuthor(Customer author) { this.author = author; }
 }

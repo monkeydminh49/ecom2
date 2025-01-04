@@ -1,7 +1,8 @@
 package com.ecommerce.controller;
 
 
-import com.ecommerce.service.CustomerService;
+import com.ecommerce.dao.CommentDAO;
+import com.ecommerce.dao.CustomerDAO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class LoginController {
 
-    private final CustomerService customerService;
+    private final CustomerDAO customerService;
 
 
     @GetMapping("/login")

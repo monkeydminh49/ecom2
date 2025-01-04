@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist | ECom2 Shop</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #2ecc71;
+            --background-color: #f8f9fa;
+            --card-background: white;
+            --text-color: #2c3e50;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .wishlist-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .wishlist-item {
+            background: var(--card-background);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .wishlist-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .item-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .item-content {
+            padding: 1.5rem;
+        }
+
+        .item-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .item-price {
+            font-size: 1.25rem;
+            color: var(--accent-color);
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            background: var(--primary-color);
+            color: white;
+            padding: 2rem 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .wishlist-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 1rem;
+            }
+
+            .item-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="header-content">
+        <a href="/" class="logo">
+            <i class="fas fa-shopping-bag"></i>
+            ECom2 Shop
+        </a>
+        <nav>
+            <a href="/cart">
+                <i class="fas fa-shopping-cart"></i>
+                Cart
+            </a>
+            <a href="/wishlist" class="active">
+                <i class="fas fa-heart"></i>
+                Wishlist
+            </a>
+            <a href="/profile">
+                <i class="fas fa-user"></i>
+                Profile
+            </a>
+        </nav>
+    </div>
+</header>
+
+<div class="container">
+    <div class="wishlist-header">
+        <h1>My Wishlist</h1>
+        <p>Keep track of all your favorite items</p>
+    </div>
+
+    <div class="wishlist-grid">
+        <!-- Mock Item 1 -->
+        <div class="wishlist-item">
+            <img src="https://via.placeholder.com/300x200" alt="Product 1" class="item-image">
+            <div class="item-content">
+                <h3 class="item-title">Wireless Headphones</h3>
+                <div class="item-price">$129.99</div>
+                <div class="item-actions">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-shopping-cart"></i>
+                        Add to Cart
+                    </button>
+                    <button class="btn btn-danger">
+                        <i class="fas fa-trash"></i>
+                        Remove
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mock Item 2 -->
+        <div class="wishlist-item">
+            <img src="https://via.placeholder.com/300x200" alt="Product 2" class="item-image">
+            <div class="item-content">
+                <h3 class="item-title">Smart Watch</h3>
+                <div class="item-price">$199.99</div>
+                <div class="item-actions">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-shopping-cart"></i>
+                        Add to Cart
+                    </button>
+                    <button class="btn btn-danger">
+                        <i class="fas fa-trash"></i>
+                        Remove
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mock Item 3 -->
+        <div class="wishlist-item">
+            <img src="https://via.placeholder.com/300x200" alt="Product 3" class="item-image">
+            <div class="item-content">
+                <h3 class="item-title">Gaming Mouse</h3>
+                <div class="item-price">$79.99</div>
+                <div class="item-actions">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-shopping-cart"></i>
+                        Add to Cart
+                    </button>
+                    <button class="btn btn-danger">
+                        <i class="fas fa-trash"></i>
+                        Remove
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mock Item 4 -->
+        <div class="wishlist-item">
+            <img src="https://via.placeholder.com/300x200" alt="Product 4" class="item-image">
+            <div class="item-content">
+                <h3 class="item-title">Mechanical Keyboard</h3>
+                <div class="item-price">$149.99</div>
+                <div class="item-actions">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-shopping-cart"></i>
+                        Add to Cart
+                    </button>
+                    <button class="btn btn-danger">
+                        <i class="fas fa-trash"></i>
+                        Remove
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="footer-content">
+        <p>&copy; 2024 ECom2 Shop. All rights reserved.</p>
+    </div>
+</footer>
+
+<script>
+    // Add hover effects and animations
+    document.querySelectorAll('.wishlist-item').forEach(item => {
+        item.addEventListener('mouseover', function() {
+            this.style.transform = 'translateY(-8px)';
+        });
+        item.addEventListener('mouseout', function() {
+            this.style.transform = 'translateY(-5px)';
+        });
+    });
+
+    // Add to cart functionality
+    document.querySelectorAll('.btn-primary').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const item = this.closest('.wishlist-item');
+            const itemTitle = item.querySelector('.item-title').textContent;
+            alert(`Added ${itemTitle} to cart!`);
+        });
+    });
+
+    // Remove from wishlist functionality
+    document.querySelectorAll('.btn-danger').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const item = this.closest('.wishlist-item');
+            item.style.opacity = '0';
+            setTimeout(() => {
+                item.remove();
+            }, 300);
+        });
+    });
+</script>
+</body>
+</html>
